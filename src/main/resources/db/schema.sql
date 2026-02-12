@@ -1,0 +1,25 @@
+CREATE table profile(
+    id INT AUTO_INCREMENT primary key,
+    name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    bio VARCHAR(500),
+    position CHAR NOT NULL ,
+    careerYears INT NOT NULL DEFAULT 0,
+    githubUrl VARCHAR(200),
+    blogUrl VARCHAR(200),
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE table techstack(
+    id INT AUTO_INCREMENT PRIMARY KEY ,
+    profile_id INT NOT NULL,
+    name VARCHAR(50) NOT NULL ,
+    category VARCHAR NOT NULL ,
+    proficiency VARCHAR NOT NULL ,
+    yearsofexp INT NOT NULL default 0,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    FOREIGN KEY(profile_id) REFERENCES profile(id) ON DELETE CASCADE
+
+    );
