@@ -1,6 +1,5 @@
 package com.study.profile_stack_api.controller;
 
-
 import com.study.profile_stack_api.dto.request.PTSCreateRequest;
 import com.study.profile_stack_api.dto.request.PTSUpdateRequest;
 import com.study.profile_stack_api.dto.response.PTSLogDeleteResponse;
@@ -14,54 +13,59 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/profile")
 public class PTSController {
-    private final PTSController ptscontroller;
+    
+    private final PTSService ptsService;
 
-    public PTSController(PTSController ptscontroller) {
-        this.ptscontroller = ptscontroller;}
+    public PTSController(PTSService ptsService) {
+        this.ptsService = ptsService;
+    }
+
     //=================================================================================
     //======================CREATE=====================================================
     @PostMapping
-    public ResponseEntity<PTSResponse> getPtsController(@RequestBody PTSCreateRequest request){
-        PTSResponse response = PTSService.getPTSController(request);
+    public ResponseEntity<PTSResponse> createPTSLog(@RequestBody PTSCreateRequest request){
+        PTSResponse response = ptsService.createPTSLog(request);
         return ResponseEntity.ok().body(response);
     }
 
     //================================================================================
     //==========================READ==================================================
     @GetMapping
-    public ResponseEntity<PTSResponse> getAllPTSLogs(){
-        List<PTSResponse> response = PTSService.getAllPTSLogs();
-        return ResponseEntity.ok(PTSResponse.success(response));
+    public ResponseEntity<List<PTSResponse>> getAllPTSLogs(){
+        List<PTSResponse> response = ptsService.getAllPTSLogs();
+        return ResponseEntity.ok(response);
     }
 
     //프로필 단건 조회
     @GetMapping("/{id}")
-    public ResponseEntity<PTSResponse> getPTSLog(@PathVariable Long id){
-        List<PTSResponse> response = PTSService.getAllPTSLogs(id);
-        return ResponseEntity.ok(PTSResponse.success(response));
+    public ResponseEntity<List<PTSResponse>> getPTSLog(@PathVariable Long id){
+        List<PTSResponse> response = ptsService.getPTSLog(id);
+        return ResponseEntity.ok(response);
     }
+
     //직무별 프로필 조회
     @GetMapping("/position/{position}")
-    public ResponseEntity<PTSResponse> getPTSLog(@PathVariable("position") String position){
-        List<PTSResponse> response = PTSService.getPTSLogByPositon(position);
-        return ResponseEntity.ok(PTSResponse.success(response));
+    public ResponseEntity<List<PTSResponse>> getPTSLogByPosition(@PathVariable("position") String position){
+        List<PTSResponse> response = ptsService.getPTSLogByPosition(position);
+        return ResponseEntity.ok(response);
     }
+
     //====================================================================================
     //===================================UPDATE========================================
-    @GetMapping("/{id}")
-    public ResponseEntity<PTSResponse> PTSLogUpdate(
+    @PutMapping("/{id}")
+    public ResponseEntity<PTSResponse> updatePTSLog(
         @PathVariable Long id,
         @RequestBody PTSUpdateRequest request){
-     PTSResponse response = PTSService.updatePTSLog(id, request);
-     return ResponseEntity.ok().body(response);
-    }
-    //=================================================================================
-    //====================DELETE=======================================================
-    @GetMapping("/{id}")
-    public ResponseEntity<PTSLogDeleteResponse> deletePTSLog(
-            @PathVariable Long id){
-        PTSLogDeleteResponse response = PTSService.deletePTSLog(id);
+        PTSResponse response = ptsService.updatePTSLog(id, request);
         return ResponseEntity.ok().body(response);
     }
-    )
+
+    //=================================================================================
+    //====================DELETE=======================================================
+    @DeleteMapping("/{id}")
+    public ResponseEntity<PTSLogDeleteResponse> deletePTSLog(
+            @PathVariable Long id){
+        PTSLogDeleteResponse response = ptsService.deletePTSLog(id);
+        return ResponseEntity.ok().body(response);
+    }
 }
